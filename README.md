@@ -43,7 +43,7 @@
 
 - 철학자 번호 1은 철학자 번호가 number_of_philosophers인 철학자 옆에 있다. 1과 number_of_philosophers를 제외한 다른 숫자 n을 가진 철학자는 철학자 n-1번과 철학자 n+1번 사이에 앉는다.
 
-- 철학자의 지위 변화는 다음을 따라야만 한다. (X는 `철학자번호`와 `timestamp_in_ms-밀리초에서 현재 timestamp`로 대체된다.)
+- 철학자의 지위 변화는 다음을 따라야만 한다. (X는 `철학자번호`이고 `timestamp_in_ms는 밀리초에서 시작시간을 뺀 값`으로 대체된다.)
 ```
 timestamp_in_ms X has taken a fork.
 timestamp_in_ms X is eating.
