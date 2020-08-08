@@ -1,6 +1,6 @@
 name: philo_one
 
-SRCS:
+SRCS: main.c
 
 OBJS: $(SRCS:.c=.o)
 
