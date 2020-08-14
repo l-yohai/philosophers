@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/03 05:11:01 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/14 23:55:43 by yohlee           ###   ########.fr       */
+/*   Created: 2020/08/15 00:52:10 by yohlee            #+#    #+#             */
+/*   Updated: 2020/08/15 01:00:35 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,49 +18,37 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef struct		s_data
+int g_philo_died;
+int g_philos_satiated;
+
+typedef struct		s_mutex
+{
+	pthread_mutex_t	*fork;
+	pthread_mutex_t	write;
+	pthread_mutex_t global_died;
+	pthread_mutex_t global_satiated;
+}					t_mutex;
+
+typedef struct		s_rules
 {
 	int				number_of_philosophers;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
+	unsigned long	time_of_start;
+	unsigned long	time_to_die;
+	unsigned long	time_to_eat;
+	unsigned long	time_to_sleep;
+}					t_rules;
 
-	int				index;
-	int				dead;
-	int				print_dead;
-
-	pthread_t		*thread;
-	pthread_mutex_t	*mutex;
-	pthread_mutex_t	inc_mutex;
-	pthread_mutex_t	print_mutex;
-
-	struct timeval	begin;
-	struct timeval	*last_eat;
-
+typedef struct		s_data
+{
+	int				id;
+	int				next_id;
+	pthread_t		tid;
+	int				meal_counter;
+	unsigned long	time_of_last_meal_ms;
+	pthread_mutex_t	last_meal;
+	t_mutex			*mutex;
+	t_rules			*rules;
 }					t_data;
-
-/*
-**					utils.c
-*/
-
-int					ft_atoi(const char *nptr);
-void				ft_putstr(char *s);
-void				ft_putchar(char c);
-void				ft_putnbr_unsigned_long(long nb);
-
-int				get_args(int ac, char **av, t_data *data);
-t_data			*create_struct_pointer();
-void			print_struct(t_data *data);
-void			free_struct(t_data *data);
-
-double			get_time(struct timeval begin, struct timeval end);
-int				declare_fork(t_data *data, int index);
-int				declare_eat(t_data *data, int index);
-int				declare_sleep(t_data *data, int index);
-int				declare_think(t_data *data, int index);
-int				declare_died(t_data *data, int index, struct timeval now);
-int				check_dead(t_data *data);
-void			unlock_mutexs(t_data *data);
 
 #endif
