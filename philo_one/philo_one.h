@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 05:11:01 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/08 16:17:47 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/14 23:55:43 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
-
 
 typedef struct		s_data
 {
