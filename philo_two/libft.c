@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 23:26:15 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 02:55:03 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/16 05:23:03 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,32 @@ unsigned long	ft_atoul(const char *s)
 		i++;
 	}
 	return (num);
+}
+
+char			*ft_ultoa(unsigned long n)
+{
+	int				len;
+	unsigned long	temp;
+	char			*result;
+	int				i;
+
+	len = 1;
+	temp = n;
+	while (temp >= 10)
+	{
+		temp /= 10;
+		len++;
+	}
+	if (!(result = (char *)malloc(sizeof(char) * (len + 1))))
+		return (NULL);
+	i = 0;
+	temp = n;
+	while (i < len)
+	{
+		result[len - i - 1] = temp % 10 + '0';
+		temp /= 10;
+		i++;
+	}
+	result[len] = 0;
+	return (result);
 }

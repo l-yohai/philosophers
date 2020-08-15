@@ -1,6 +1,6 @@
-NAME = philo_one
+NAME = philo_two
 
-SRCS = cycle.c init.c libft.c main.c print.c utils.c
+SRCS = cycle.c init.c libft.c main.c print.c utils.c ft_strjoin.c
 
 OBJS = $(SRCS:.c=.o)
 

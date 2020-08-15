@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 23:20:40 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 02:55:08 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/16 05:09:56 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,23 @@ void	print_msg(t_philo *philo, int index, uint64_t time)
 
 int		print_status(t_philo *philo, int index)
 {
-	pthread_mutex_lock(&philo->mutex->global_died);
+	sem_wait(philo->semaphore->global_died);
 	if (g_philo_died)
 	{
-		pthread_mutex_unlock(&philo->mutex->global_died);
+		sem_post(philo->semaphore->global_died);
 		return (0);
 	}
-	pthread_mutex_unlock(&philo->mutex->global_died);
-	pthread_mutex_lock(&philo->mutex->write);
+	sem_post(philo->semaphore->global_died);
+	sem_wait(philo->semaphore->write);
 	print_msg(philo, index, get_time());
-	pthread_mutex_unlock(&philo->mutex->write);
+	sem_post(philo->semaphore->write);
 	return (1);
 }
 
 void	*print_exit(t_philo *philo, int index, uint64_t time)
 {
-	pthread_mutex_lock(&philo->mutex->write);
-	pthread_mutex_unlock(&philo->mutex->global_died);
+	sem_wait(philo->semaphore->write);
+	sem_post(philo->semaphore->global_died);
 	if (index == HAS_DIED)
 	{
 		ft_putnbr(time - philo->data->time_of_start);
@@ -58,6 +58,6 @@ void	*print_exit(t_philo *philo, int index, uint64_t time)
 		write(1, MSG_FINISH, ft_strlen(MSG_FINISH));
 		exit(EXIT_SUCCESS);
 	}
-	pthread_mutex_unlock(&philo->mutex->write);
+	sem_post(philo->semaphore->write);
 	return (NULL);
 }

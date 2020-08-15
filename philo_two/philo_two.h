@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 00:52:10 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 03:44:43 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/16 05:23:46 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct		s_philo
 	int				next_id;
 	int				count_eat;
 	uint64_t		time_of_last_eat;
-	sem_t			last_eat;
+	sem_t			*last_eat;
 	t_data			*data;
 	t_semaphore		*semaphore;
 }					t_philo;
@@ -87,7 +87,8 @@ void				*monitor_death(void *philo);
 */
 
 int					init_data(char **argv, t_data *data);
-int					init_thread(t_philo **philo, t_mutex *mutex, int num);
+int					init_semaphore(t_philo **philo, t_semaphore *sem, int num);
+int					unlink_semaphores(int num);
 
 /*
 **		libft.c
@@ -97,7 +98,8 @@ size_t				ft_strlen(const char *s);
 void				ft_putchar(char c);
 void				ft_putnbr(unsigned long n);
 unsigned long		ft_atoul(const char *s);
-
+char				*ft_ultoa(unsigned long n);
+char				*ft_strjoin(char *s1, char *s2);
 /*
 **		print.c
 */
@@ -114,5 +116,12 @@ uint64_t			get_time(void);
 int					check_arguments(char **argv);
 int					exit_error(char *s);
 void				clean(t_philo *philo);
+
+/*
+**		ft_strjoin.c
+*/
+
+char				*ft_strdup(char *s);
+char				*ft_strjoin(char *s1, char *s2);
 
 #endif

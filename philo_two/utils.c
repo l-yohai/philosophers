@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 22:03:16 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 02:55:13 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/16 05:04:32 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,4 @@ int			exit_error(char *s)
 	write(2, s, ft_strlen(s));
 	exit(EXIT_FAILURE);
 	return (EXIT_FAILURE);
-}
-
-void		clean(t_philo *philo)
-{
-	int i;
-
-	i = -1;
-	while (++i < philo->data->num_of_philosophers)
-	{
-		pthread_mutex_destroy(&philo->mutex->fork[i]);
-		pthread_mutex_destroy(&philo[i].last_eat);
-	}
-	pthread_mutex_destroy(&philo->mutex->write);
-	pthread_mutex_destroy(&philo->mutex->global_died);
-	pthread_mutex_destroy(&philo->mutex->global_satiated);
-	free(philo->mutex->fork);
-	free(philo);
 }

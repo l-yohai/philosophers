@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 00:52:01 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 02:54:34 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/16 05:18:34 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	run(t_philo *philo, t_data *data)
 		pthread_join(philo[i].thread, NULL);
 		i++;
 	}
+	free(philo);
 }
 
 int		main(int argc, char **argv)
@@ -49,7 +50,7 @@ int		main(int argc, char **argv)
 	philo = 0;
 	if (init_data(argv, &data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (init_thread(\
+	if (init_semaphore(\
 			&philo, &sem, data.num_of_philosophers) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	i = 0;
@@ -61,6 +62,5 @@ int		main(int argc, char **argv)
 		i++;
 	}
 	run(philo, &data);
-	clean(philo);
 	return (EXIT_SUCCESS);
 }
