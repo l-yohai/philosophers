@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 23:21:11 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/20 18:04:44 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/20 18:59:07 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int		init_data(char **argv, t_data *data)
 
 int		init_semaphore(t_semaphore *sem, int num)
 {
+	unlink_semaphores(num);
 	sem->fork = sem_open("fork", O_CREAT | O_EXCL, 0644, num);
 	sem->write = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
 	sem->finished_eats = sem_open("finished_eats", O_CREAT | O_EXCL, 0644, 0);

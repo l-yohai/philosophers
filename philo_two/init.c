@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 23:21:11 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/20 18:02:47 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/20 18:59:05 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,20 @@ int		init_semaphore(t_philo **philo, t_semaphore *sem, int num)
 
 	if (!(*philo = malloc(sizeof(t_philo) * num)))
 		return (exit_error(MSG_ERROR_MALLOC));
+	unlink_semaphores(num);
 	sem->fork = sem_open("fork", O_CREAT | O_EXCL, 0644, num);
 	sem->write = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
 	sem->global_died = sem_open("global_died", O_CREAT | O_EXCL, 0644, 1);
 	sem->global_satiated =\
 		sem_open("global_satiated", O_CREAT | O_EXCL, 0644, 1);
-	i = 0;
-	while (i < num)
+	i = -1;
+	while (++i < num)
 	{
 		s = ft_strjoin("last_eat", ft_ultoa((unsigned long)i));
 		(*philo)[i].last_eat = sem_open(s, O_CREAT | O_EXCL, 0644, 1);
 		free(s);
 		if ((*philo)[i].last_eat == SEM_FAILED)
 			return (init_error(num));
-		i++;
 	}
 	unlink_semaphores(num);
 	if (sem->fork == SEM_FAILED || sem->write == SEM_FAILED ||\
@@ -71,7 +71,7 @@ int		unlink_semaphores(int num)
 	i = 0;
 	while (i < num)
 	{
-		s = ft_strjoin("last_eat", ft_ultoa((unsigned long)i));
+		s = ft_strjoin("last_eat", ft_ultoa(i));
 		sem_unlink(s);
 		free(s);
 		i++;
@@ -80,5 +80,5 @@ int		unlink_semaphores(int num)
 	sem_unlink("write");
 	sem_unlink("global_died");
 	sem_unlink("global_satiated");
-	return (1);
+	return (EXIT_SUCCESS);
 }
