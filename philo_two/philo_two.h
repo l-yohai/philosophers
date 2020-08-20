@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 00:52:10 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 05:23:46 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/20 18:02:38 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void				*monitor_death(void *philo);
 int					init_data(char **argv, t_data *data);
 int					init_semaphore(t_philo **philo, t_semaphore *sem, int num);
 int					unlink_semaphores(int num);
+int					init_error(int num);
 
 /*
 **		libft.c
@@ -115,7 +116,6 @@ void				*print_exit(t_philo *philo, int index, uint64_t time);
 uint64_t			get_time(void);
 int					check_arguments(char **argv);
 int					exit_error(char *s);
-void				clean(t_philo *philo);
 
 /*
 **		ft_strjoin.c

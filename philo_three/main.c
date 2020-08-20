@@ -6,61 +6,55 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 00:52:01 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/18 09:00:55 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/20 17:43:16 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_three.h"
 
-void	run(t_philo *philo, t_data *data)
+void	run(t_data *data, t_semaphore *sem)
 {
 	int			i;
-	pthread_t	thread;
+	pid_t		*pid;
+	pid_t		pid2;
+	t_philo		philo;
 
+	if (!(pid = (pid_t *)malloc(sizeof(pid_t) * (data->num_of_philosophers))))
+		exit_error(MSG_ERROR_MALLOC);
 	data->time_of_start = get_time();
 	i = 0;
 	while (i < data->num_of_philosophers)
 	{
-		pthread_create(&philo[i].thread, NULL, cycle, &philo[i]);
+		philo.id = i;
+		philo.data = data;
+		philo.semaphore = sem;
 		if (i == 0 && data->num_of_times_each_philosopher_must_eat > 0)
-			pthread_create(&thread, NULL, monitor_eat, &philo[i]);
-		usleep(50);
+			pid2 = fork();
+		if (i == 0 &&\
+				data->num_of_times_each_philosopher_must_eat > 0 && pid2 == 0)
+			monitor_eat(&philo);
+		if ((pid[i] = fork()) == 0)
+		{
+			free(pid);
+			cycle(&philo);
+		}
+		usleep(30);
 		i++;
 	}
-	if (data->num_of_times_each_philosopher_must_eat > 0)
-		pthread_join(thread, NULL);
-	i = 0;
-	while (i < data->num_of_philosophers)
-	{
-		pthread_join(philo[i].thread, NULL);
-		i++;
-	}
+	clean(pid, pid2, data, sem);
 }
 
 int		main(int argc, char **argv)
 {
-	t_philo		*philo;
 	t_data		data;
-	t_mutex		mutex;
-	int			i;
+	t_semaphore	sem;
 
 	if (argc != 5 && argc != 6)
 		return (exit_error(MSG_ERROR_ARGC));
-	philo = 0;
 	if (init_data(argv, &data) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (init_thread(\
-			&philo, &mutex, data.num_of_philosophers) == EXIT_FAILURE)
+	if (init_semaphore(&sem, data.num_of_philosophers) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	i = 0;
-	while (i < data.num_of_philosophers)
-	{
-		philo[i].id = i;
-		philo[i].data = &data;
-		philo[i].mutex = &mutex;
-		i++;
-	}
-	run(philo, &data);
-	clean(philo);
+	run(&data, &sem);
 	return (EXIT_SUCCESS);
 }

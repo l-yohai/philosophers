@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 00:52:01 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 05:18:34 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/18 09:00:46 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		main(int argc, char **argv)
 	t_semaphore	sem;
 	int			i;
 
-	if ((argc != 5 && argc != 6))
+	if (argc != 5 && argc != 6)
 		return (exit_error(MSG_ERROR_ARGC));
 	philo = 0;
 	if (init_data(argv, &data) == EXIT_FAILURE)

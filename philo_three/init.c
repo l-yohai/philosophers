@@ -6,11 +6,11 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 23:21:11 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/20 18:02:47 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/20 18:04:44 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
 int		init_data(char **argv, t_data *data)
 {
@@ -27,40 +27,17 @@ int		init_data(char **argv, t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-int		init_semaphore(t_philo **philo, t_semaphore *sem, int num)
+int		init_semaphore(t_semaphore *sem, int num)
 {
-	int			i;
-	char		*s;
-
-	if (!(*philo = malloc(sizeof(t_philo) * num)))
-		return (exit_error(MSG_ERROR_MALLOC));
 	sem->fork = sem_open("fork", O_CREAT | O_EXCL, 0644, num);
 	sem->write = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
-	sem->global_died = sem_open("global_died", O_CREAT | O_EXCL, 0644, 1);
-	sem->global_satiated =\
-		sem_open("global_satiated", O_CREAT | O_EXCL, 0644, 1);
-	i = 0;
-	while (i < num)
-	{
-		s = ft_strjoin("last_eat", ft_ultoa((unsigned long)i));
-		(*philo)[i].last_eat = sem_open(s, O_CREAT | O_EXCL, 0644, 1);
-		free(s);
-		if ((*philo)[i].last_eat == SEM_FAILED)
-			return (init_error(num));
-		i++;
-	}
-	unlink_semaphores(num);
+	sem->finished_eats = sem_open("finished_eats", O_CREAT | O_EXCL, 0644, 0);
+	sem->simulation_end =\
+		sem_open("simulation_end", O_CREAT | O_EXCL, 0644, 0);
 	if (sem->fork == SEM_FAILED || sem->write == SEM_FAILED ||\
-		sem->global_died == SEM_FAILED || sem->global_satiated == SEM_FAILED)
-		return (exit_error(MSG_ERROR_SEM));
+		sem->finished_eats == SEM_FAILED || sem->simulation_end == SEM_FAILED)
+		return (unlink_semaphores(num));
 	return (EXIT_SUCCESS);
-}
-
-int		init_error(int num)
-{
-	unlink_semaphores(num);
-	exit_error(MSG_ERROR_SEM);
-	return (EXIT_FAILURE);
 }
 
 int		unlink_semaphores(int num)
@@ -71,14 +48,14 @@ int		unlink_semaphores(int num)
 	i = 0;
 	while (i < num)
 	{
-		s = ft_strjoin("last_eat", ft_ultoa((unsigned long)i));
+		s = ft_strjoin("last_eat", ft_ultoa(i));
 		sem_unlink(s);
 		free(s);
 		i++;
 	}
 	sem_unlink("fork");
 	sem_unlink("write");
-	sem_unlink("global_died");
-	sem_unlink("global_satiated");
-	return (1);
+	sem_unlink("finished_eats");
+	sem_unlink("simulation_end");
+	return (EXIT_FAILURE);
 }

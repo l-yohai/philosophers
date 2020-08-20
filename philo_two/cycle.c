@@ -6,7 +6,7 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 23:21:44 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/16 05:15:49 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/18 09:23:14 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ void	*monitor_eat(void *philo)
 
 void	*monitor_death(void *philo)
 {
-	t_philo			*p;
-	unsigned long	time;
+	t_philo		*p;
+	uint64_t	time;
 
 	p = philo;
 	while (1)
