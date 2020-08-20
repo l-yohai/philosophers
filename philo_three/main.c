@@ -6,22 +6,18 @@
 /*   By: yohlee <yohlee@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/15 00:52:01 by yohlee            #+#    #+#             */
-/*   Updated: 2020/08/20 17:43:16 by yohlee           ###   ########.fr       */
+/*   Updated: 2020/08/20 18:22:57 by yohlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-void	run(t_data *data, t_semaphore *sem)
+void	create_process(t_data *data, t_semaphore *sem, pid_t *pid)
 {
-	int			i;
-	pid_t		*pid;
-	pid_t		pid2;
-	t_philo		philo;
+	t_philo	philo;
+	pid_t	pid2;
+	int		i;
 
-	if (!(pid = (pid_t *)malloc(sizeof(pid_t) * (data->num_of_philosophers))))
-		exit_error(MSG_ERROR_MALLOC);
-	data->time_of_start = get_time();
 	i = 0;
 	while (i < data->num_of_philosophers)
 	{
@@ -42,6 +38,16 @@ void	run(t_data *data, t_semaphore *sem)
 		i++;
 	}
 	clean(pid, pid2, data, sem);
+}
+
+void	run(t_data *data, t_semaphore *sem)
+{
+	pid_t		*pid;
+
+	if (!(pid = (pid_t *)malloc(sizeof(pid_t) * (data->num_of_philosophers))))
+		exit_error(MSG_ERROR_MALLOC);
+	data->time_of_start = get_time();
+	create_process(data, sem, pid);
 }
 
 int		main(int argc, char **argv)
